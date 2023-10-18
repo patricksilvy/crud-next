@@ -8,6 +8,9 @@ import Client from "@/core/Client"
 import { useState } from "react"
 
 export default function Home() {
+  const [client, setClient] = useState<Client>(Client.empty())
+  const [visible, setVisible] = useState<'table' | 'form'>('table')
+
   const clients = [
     new Client('Ana', 34, '1'),
     new Client('Bia', 45, '2'),
@@ -15,10 +18,9 @@ export default function Home() {
     new Client('Pedro', 20, '4'),
   ]
 
-  const [visible, setVisible] = useState<'table' | 'form'>('table')
-
   function clientSelected(client: Client) {
-    console.log(client.name)
+    setClient(client)
+    setVisible('form')
   }
 
   function clientDeleted(client: Client) {
@@ -27,6 +29,12 @@ export default function Home() {
 
   function saveClient(client: Client) {
     console.log(client)
+    setVisible('table')
+  }
+
+  function newClient() {
+    setClient(Client.empty())
+    setVisible('form')
   }
 
   return (
@@ -40,7 +48,7 @@ export default function Home() {
           <>
             <div className="flex justify-end">
               <Button className="mb-4" color="green"
-                onClick={() => setVisible('form')}>
+                onClick={newClient}>
                 Novo Cliente
               </Button>
             </div>
@@ -52,9 +60,9 @@ export default function Home() {
           </>
         ) : (
           <Form 
-            client={clients[2]}
+            client={client}
             canceled={() => setVisible('table')} 
-            clientModified={() => saveClient}
+            clientModified={saveClient}
           />
         )}
       </Layaut>
