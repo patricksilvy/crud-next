@@ -1,9 +1,11 @@
 'use client'
 
 import Button from "@/components/Button"
+import Form from "@/components/Form"
 import Layaut from "@/components/Layout"
 import Table from "@/components/Table"
 import Client from "@/core/Client"
+import { useState } from "react"
 
 export default function Home() {
   const clients = [
@@ -13,13 +15,19 @@ export default function Home() {
     new Client('Pedro', 20, '4'),
   ]
 
+  const [visible, setVisible] = useState<'table' | 'form'>('table')
+
   function clientSelected(client: Client) {
     console.log(client.name)
-  } 
+  }
 
   function clientDeleted(client: Client) {
     console.log(client.name)
-  } 
+  }
+
+  function saveClient(client: Client) {
+    console.log(client)
+  }
 
   return (
     <main className={`
@@ -28,14 +36,27 @@ export default function Home() {
       text-white
     `}>
       <Layaut title="Cadastro Simples">
-        <div className="flex justify-end">
-          <Button className="mb-4" color="green">Novo Cliente</Button>
-        </div>
-        <Table
-          clients={clients}
-          clientSelected={clientSelected}
-          clientDeleted={clientDeleted}
-        ></Table>
+        {visible === 'table' ? (
+          <>
+            <div className="flex justify-end">
+              <Button className="mb-4" color="green"
+                onClick={() => setVisible('form')}>
+                Novo Cliente
+              </Button>
+            </div>
+            <Table
+              clients={clients}
+              clientSelected={clientSelected}
+              clientDeleted={clientDeleted}
+            ></Table>
+          </>
+        ) : (
+          <Form 
+            client={clients[2]}
+            canceled={() => setVisible('table')} 
+            clientModified={() => saveClient}
+          />
+        )}
       </Layaut>
     </main>
   )
