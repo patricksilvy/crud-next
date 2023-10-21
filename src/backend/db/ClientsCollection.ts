@@ -1,6 +1,6 @@
 import Client from "@/core/Client";
 import ClientRepo from "@/core/ClientRepo";
-import firebase from "firebase/compat/app";
+import firebase from "firebase";
 
 export default class ClientsCollection implements ClientRepo {
     #conversor = {
